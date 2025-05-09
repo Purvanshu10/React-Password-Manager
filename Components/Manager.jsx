@@ -24,6 +24,27 @@ const Manager = () => {
   const savePassword = () => {
     setpasswordArray([...passwordArray, form])
     localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
+    setform({ url: "", username: "", password: "" })
+  }
+
+  const deletePassword = (indexToDelete) => {
+    let confirms = confirm("Are you sure you want to delete?")
+    if(confirms) {
+      let newPasswordArray = passwordArray.filter((item,index)=>
+        index !== indexToDelete
+      )
+      setpasswordArray(newPasswordArray)
+      localStorage.setItem("passwords", JSON.stringify(newPasswordArray))
+    } 
+  }
+
+  const editPassword = (indexToEdit) => {
+    setform(passwordArray.filter((item,index)=>index===indexToEdit)[0])
+    let newPasswordArray = passwordArray.filter((item,index)=>
+      index !== indexToEdit
+    )
+    setpasswordArray(newPasswordArray)
+   
   }
 
   const handleChange = (e) => {
@@ -43,7 +64,7 @@ const Manager = () => {
     });
     navigator.clipboard.writeText(text)
   }
-  
+
   return (
     <>
       <ToastContainer
@@ -59,7 +80,10 @@ const Manager = () => {
         theme="light"
 
       />
-      <main className="flex-1 container mx-auto py-8 px-4">
+
+
+      
+      <main className="flex-1 container mx-auto py-8 px-4 bg-gradient-to-r from-green-0 via-green-100 to-green-0 ">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-1">
             <span className="text-gray-800">&lt;</span>
@@ -106,7 +130,7 @@ const Manager = () => {
                 onClick={showPassword}
 
               >
-                {eye ? <EyeOff size={20} /> : <Eye size={20} />}
+                {eye ? <EyeOff className='cursor-pointer' size={20} /> : <Eye className='cursor-pointer' size={20} />}
 
               </button>
             </div>
@@ -138,10 +162,10 @@ const Manager = () => {
               </thead>
               <tbody>
                 {passwordArray.map((item, index) => {
-                  return <tr key={index} className="border-t border-gray-200 bg-green-50">
+                  return <tr key={index} className="border-t border-gray-200 bg-green-100">
                     <td className="py-3 px-4">
-                      <div className="flex items-center">
-                        <a target='_blank' href={item.url}> {item.url}</a>
+                      <div className="flex items-center ">
+                        <a className='underline text-blue-800' target='_blank' href={item.url}> {item.url}</a>
                         <button onClick={() => { copyText(item.url) }} className="ml-2 cursor-pointer">
                           <Copy className='hover:size-4.5' size={16} />
                         </button>
@@ -164,15 +188,12 @@ const Manager = () => {
                       </div>
                     </td>
                     <td className="py-3 px-4">
-                      <div className="flex justify-center space-x-2">
-                        <button className="p-1">
-                          <Pencil size={18} />
+                      <div className="flex justify-center space-x-2 ">
+                        <button onClick={()=>{editPassword(index)}} className="p-1">
+                          <Pencil className='cursor-pointer' size={18} />
                         </button>
-                        <button
-                          className="p-1"
-
-                        >
-                          <Trash size={18} />
+                        <button onClick={()=>{deletePassword(index)}} className="p-1">
+                          <Trash className='cursor-pointer' size={18} />
                         </button>
                       </div>
                     </td>
