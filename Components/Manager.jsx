@@ -22,9 +22,33 @@ const Manager = () => {
   }
 
   const savePassword = () => {
-    setpasswordArray([...passwordArray, form])
-    localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
-    setform({ url: "", username: "", password: "" })
+    if (form.url.length>0 && form.username.length>0 && form.password.length>0) {
+      toast('✅ Password saved!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setpasswordArray([...passwordArray, form])
+      localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
+      setform({ url: "", username: "", password: "" })
+    }
+    else {
+      toast('Error : Input cannot be empty.', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
   }
 
   const deletePassword = (indexToDelete) => {
@@ -36,6 +60,16 @@ const Manager = () => {
       setpasswordArray(newPasswordArray)
       localStorage.setItem("passwords", JSON.stringify(newPasswordArray))
     } 
+    toast('✅ Password Deleted!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   }
 
   const editPassword = (indexToEdit) => {
@@ -181,7 +215,7 @@ const Manager = () => {
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center">
-                        {item.password}
+                        {'*'.repeat(item.password.length)}
                         <button onClick={() => { copyText(item.password) }} className="ml-2 cursor-pointer ">
                           <Copy className='hover:size-4.5' size={16} />
                         </button>
